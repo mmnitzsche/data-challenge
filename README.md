@@ -53,17 +53,18 @@ pip install -r requirements.txt
 
 ---
 
-## 💼 Descrição dos Cases
+## 💼 Resumo dos desafios
+
+Nessa seção é uma breve
 
 ### 📊 Case 1: SQL & Raciocínio Lógico
 
 - Esse case é focado em resolução de perguntas de negócio utilizando SQL.
-- As respostas e explicações podem estar em um arquivo `.sql`, `.py`, `.md` ou diretamente no corpo de um notebook ou script.
 - Exige raciocínio lógico e clareza na explicação.
 
 ### 📈 Case 2: Análise e Criação de Métricas
 
-- Análise de um dataset de vendas fictício (presente no arquivo `loja_categoria_tm.csv`).
+- Análise de um dataset de vendas fictício (presente no arquivo `loja_categoria_tm.csv`) ou pela conexão do banco de dados da looqbox.
 - Criação de métricas relevantes por categoria, loja e produto.
 - Organização do código modular em scripts:
   - `main.py`: ponto de entrada
@@ -86,9 +87,34 @@ pip install -r requirements.txt
 ### Case 2
 
 ```bash
-cd case2
+cd .\case2\      
 python main.py
 ```
+
+Ira renderizar Esse dataframe:
+| Loja          | Categoria    | TM    |
+|---------------|--------------|-------|
+| Bahia         | Atacado      | 15.39 |
+| Bangkok       | Posto        | 13.67 |
+| Belem         | Proximidade  | 15.37 |
+| Berlin        | Proximidade  | 15.39 |
+| Buenos Aires  | Atacado      | 15.39 |
+| Chicago       | Varejo       | 15.53 |
+| Dubai         | Atacado      | 15.39 |
+| Hong Kong     | Farma        | 26.33 |
+| London        | Farma        | 28.96 |
+| Madri         | Farma        | 29.00 |
+| Miami         | Posto        | 13.67 |
+| New York      | Proximidade  | 15.39 |
+| Paris         | Proximidade  | 15.39 |
+| Rio de Janeiro| Farma        | 29.56 |
+| Roma          | Varejo       | 15.39 |
+| Salvador      | Atacado      | 15.39 |
+| Sao Paulo     | Varejo       | 15.39 |
+| Sidney        | Posto        | 13.67 |
+| Tokio         | Varejo       | 15.39 |
+| Vancouver     | Posto        | 13.67 |
+
 
 ### Case 3
 
