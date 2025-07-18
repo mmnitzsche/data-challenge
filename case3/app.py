@@ -7,6 +7,7 @@ import sys
 from sql_queries import imdb_query
 from functions import clean_list_items, ensure_list_format, filter_df_by_list_contains,get_filtered_actors,get_filtered_genres,update_selected_genres ,update_selected_actors
 
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from connection import read_database
 
