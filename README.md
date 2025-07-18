@@ -2,6 +2,10 @@
 
 Este repositório contém a minha solução para o desafio de dados proposto pela [Looqbox](https://github.com/looqbox/data-challenge). O desafio é dividido em três partes (cases) + um teste de SQL, cada uma com um foco diferente de análise e manipulação de dados.
 
+
+
+Dashboard IMDB interativo do Case 3: [Aqui](https://imdb-dashboard.streamlit.app/)
+
 ---
 
 ## 📁 Estrutura do Repositório
@@ -12,7 +16,7 @@ Este repositório contém a minha solução para o desafio de dados proposto pel
 Para conectar ao banco de dados de forma segura, é necessário configurar a variável de ambiente <code>DATABASE_URL</code>.
 Em ambiente local, essa configuração deve ser feita em um arquivo <code>.env</code>.<br>
 <br>
-Streamlit:  [Dashboard em publicado](https://imdb-dashboard.streamlit.app/)
+Streamlit:  [Dashboard publicado](https://imdb-dashboard.streamlit.app/)
 <br>
 Caso queira publicar essa solução no Stramlit (Streamlit Cloud), a variável da string de conexão deve ser adicionada na seção <code>Settings > Secrets</code> do seu aplicativo.
 </span>
@@ -298,7 +302,7 @@ python main.py
 ____
 <br>
 
-# 3️⃣ Case 3
+# 3️⃣ Case [Dashboard IMDB](https://imdb-dashboard.streamlit.app/)
 
 ### **Case 3** - **Questão**: Building your own visualization
 Create at least one chart using the table IMDB_movies. The code must be in Python, and you are free to use any libraries, data in the table and graphic format. Explain why you chose the visualization (or visualizations) you are submitting.
