@@ -60,9 +60,9 @@ Você vai ver apenas um resumo das soluções questões/desafios.
 Caso queira ver os desafios mais mais detalhes acesse: [Looqbox](https://github.com/looqbox/data-challenge).
 
 
-# 1️⃣ Case 1
+# 0️⃣ SQL TEST
 
-### **Case 1.1** - **Questão**: What are the 10 most expensive products in the company?
+### **SQL TEST.1** - **Questão**: What are the 10 most expensive products in the company?
 
 ```sql
 SELECT
@@ -93,7 +93,7 @@ LIMIT 10;
 
 <br>
 
-### **Case 1.2** - **Questão**: What sections do the ``BEBIDAS`` and ``PADARIA`` departments have?
+### **SQL TEST.2** - **Questão**: What sections do the ``BEBIDAS`` and ``PADARIA`` departments have?
 
 ```sql
 SELECT DISTINCT
@@ -119,11 +119,10 @@ ORDER BY SECTION_NAME;
 
 ___
 
-# 2️⃣ Case 2
+# 1️⃣ Case 1
 
 
-
-### **Case 2.1** - **Questão**:  The Dev Team was tired of developing the same old queries just varying the filters accordingly to their boss demands.
+### **Questão**:  The Dev Team was tired of developing the same old queries just varying the filters accordingly to their boss demands.
 As a new member of the crew, your mission now is to create a dynamic function in Python, on the most flexible of ways, to produce queries and retrieve a dataframe based on three parameters:
 
 - product_code: integer
@@ -162,12 +161,12 @@ def retrieve_data(product_code: int, store_code: int, date: list) -> pd.DataFram
 > Para recuperar os dados criei a `retrieve_data`, que recebe como parâmetros o código do produto (`product_code`), o código da loja (`store_code`) e uma lista com duas datas (`date`) representando o início e o fim do período desejado.  
 > A partir desses parâmetros, construo uma query SQL dinamicamente utilizando f-string (<em>usei ``'''`` para deixar mais legível</em>) para filtrar os dados da tabela `data_product_sales` com base nas colunas `PRODUCT_CODE`, `STORE_CODE` e `DATE`. Em seguida, utilizo a função `read_database` para executar essa query e carregar os dados em um DataFrame do Pandas.
 
+<br>
 
 ___
-### Case 2.2
+# 2️⃣ Case 2
 
-
-A brand new client sent you two ready-to-go queries. Those are listed below:
+### **Questão**: A brand new client sent you two ready-to-go queries. Those are listed below:
 
 **Query 1:**
 ``` sql
