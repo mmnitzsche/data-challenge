@@ -1,6 +1,6 @@
 # 🚀 Data Challenge - Looqbox
 
-Este repositório contém a minha solução para o desafio de dados proposto pela [Looqbox](https://github.com/looqbox/data-challenge). O desafio é dividido em três partes (cases), cada uma com um foco diferente de análise e manipulação de dados.
+Este repositório contém a minha solução para o desafio de dados proposto pela [Looqbox](https://github.com/looqbox/data-challenge). O desafio é dividido em três partes (cases) + um teste de SQL, cada uma com um foco diferente de análise e manipulação de dados.
 
 ---
 
@@ -10,8 +10,11 @@ Este repositório contém a minha solução para o desafio de dados proposto pel
 <span style="font-size: 16px; font-weight: bold;">Importante:</span>
 <span style="font-size: 16px;">
 Para conectar ao banco de dados de forma segura, é necessário configurar a variável de ambiente <code>DATABASE_URL</code>.
-Em ambiente local, essa configuração deve ser feita em um arquivo <code>.env</code>.
-Já em produção (Streamlit Cloud), a variável deve ser adicionada na seção <code>Settings > Secrets</code> do seu aplicativo.
+Em ambiente local, essa configuração deve ser feita em um arquivo <code>.env</code>.<br>
+<br>
+Streamlit:  [Dashboard em publicado](https://imdb-dashboard.streamlit.app/)
+<br>
+Caso queira publicar essa solução no Stramlit (Streamlit Cloud), a variável da string de conexão deve ser adicionada na seção <code>Settings > Secrets</code> do seu aplicativo.
 </span>
 ---
 
@@ -21,24 +24,41 @@ Já em produção (Streamlit Cloud), a variável deve ser adicionada na seção 
 ```
 
 ```
-├── case1/
-│   ├── case-1-1.sql
-│   ├── case-1-1.sql
-│   └── case-1-1.sql
-├── case2/
+├── .devcontainer
+│   └── devcontainer.json
+├── case1
+│   ├── case_1.py
 │   ├── main.py
-│   ├── analysis.py
-│   ├── sql_queries.py
-├── case3/
+│   └── sql_queries.py
+├── case2
+│   ├── case_2.py
+│   ├── main.py
+│   └── sql_queries.py
+├── case3
 │   ├── app.py
 │   ├── functions.py
 │   └── sql_queries.py
-├── media/
-├── venv/
-├── connection.py
+├── media
+│   ├── cards_title.png
+│   ├── filters.gif
+│   ├── hint_multbox.gif
+│   ├── table_filter.gif
+│   └── top_metrics.gif
+├── sql_test
+│   ├── case-1-1.sql
+│   ├── case-1-2.sql
+│   └── case-1-3.sql
+├── venv
+│   └── pyvenv.cfg
+├── __pycache__
+│   ├── connection.cpython-311.pyc
+│   └── connection_string.cpython-311.pyc
 ├── .env
-├── requirements.txt
-└── README.md
+├── .gitignore
+├── connection.py
+├── connection_string.py
+├── README.md
+└── requirements.txt
 ```
 
 ---
@@ -56,8 +76,7 @@ pip install -r requirements.txt
 
 ___
 ## 🧠 Resolução dos desafios  
-Você vai ver apenas um resumo das soluções questões/desafios.
-Caso queira ver os desafios mais mais detalhes acesse: [Looqbox](https://github.com/looqbox/data-challenge).
+Nesse documento vai conter apenas um resumo das questões do desafio Caso queira ver os as questões do desafios com mais detalhes acesse o repositório: [Looqbox](https://github.com/looqbox/data-challenge)
 
 
 # 0️⃣ SQL TEST
@@ -133,13 +152,13 @@ GROUP BY c.BUSINESS_NAME
 ORDER BY total_sales_usd DESC;
 ```
 > 💡 **Descrição da Solução:**  
-> Esse código SQL calcula o total de vendas em dólares (`SALES_VALUE`) por área de negócio (`BUSINESS_NAME`) durante o **primeiro trimestre de 2019** (de 1º de janeiro a 31 de março). Usei menor que  `< 2019-04-01`
+> Para obter o total de vendas  (`SALES_VALUE`) por área de negócio (`BUSINESS_NAME`) durante o **primeiro trimestre de 2019** (de 1º de janeiro a 31 de março). Usei menor que  `< 2019-04-01`
 > 
-> A consulta realiza um `JOIN` entre as tabelas `data_store_sales` e `data_store_cad` com base na coluna `STORE_CODE`, garantindo que os dados de venda sejam associados.
+> Fiz um `JOIN` entre as tabelas `data_store_sales` e `data_store_cad` com base na coluna `STORE_CODE`, garantindo que os dados de venda sejam associados.
 > 
-> Em seguida, filtra os dados de vendas para incluir apenas o período desejado.  
+> Em seguida, filtrei os dados de vendas para incluir apenas o período desejado.  
 > 
-> Os resultados são agrupados por área de negócio (`BUSINESS_NAME`) e a soma das vendas (`SALES_VALUE`) é calculada para cada grupo.  
+> agrupei por área de negócio (`BUSINESS_NAME`) e a soma das vendas (`SALES_VALUE`) foi calculada para cada grupo.  
 > 
 > Por fim, os resultados são ordenados em ordem decrescente de vendas totais (`total_sales_usd`).
 
@@ -150,8 +169,6 @@ ORDER BY total_sales_usd DESC;
 | Atacado          | 80.384.884,60          |
 | Proximidade      | 80.171.122,80          |
 | Posto            | 32.072.326,40          |
-
-
 
 ___
 
@@ -199,6 +216,11 @@ def retrieve_data(product_code: int, store_code: int, date: list) -> pd.DataFram
 
 <br>
 
+## 🛠️ Como executar
+```bash
+cd .\case1\ 
+python main.py
+```
 ___
 # 2️⃣ Case 2
 
@@ -232,12 +254,14 @@ Use the queries as they are (do not modify them or create a new one);
 Please filter the period between this given range: `['2019-10-01','2019-12-31']`
 
 > 💡 **Descrição da Solução:**  
-> Para calcular o **Ticket Médio (TM)** por loja e categoria, comecei importando os dados das tabelas `data_store_sales` e `data_store_cad` usando a função `read_database` (<em>das quais as queries já estão prontas no arquivo `case2/sql_queries.py`</em>).  
+> Para calcular o **Ticket Médio (TM)** por loja e categoria, comecei importando os dados das tabelas `data_store_sales` e `data_store_cad` usando a função `read_database` com as queries pré estabelecidas (<em>das quais as queries já estão prontas no arquivo `case2/sql_queries.py`</em>).
 > Em seguida, realizei um `merge` entre essas duas bases utilizando a coluna `STORE_CODE` como chave, garantindo que cada venda fosse associada à loja e à categoria correta.  
 <br>
 > Após isso, agrupei os dados por `STORE_NAME` e `BUSINESS_NAME`, somando os valores de `SALES_VALUE` (valor vendido) e `SALES_QTY` (quantidade vendida).  
-> Com esses dados agregados, calculei o **Ticket Médio (TM)** dividindo o valor vendido pela quantidade de itens vendidos, e arredondei o resultado para duas casas decimais.  
-<br>
+> Com esses dados agregados, calculei o **Ticket Médio (TM)** dividindo o valor vendido pela quantidade de itens vendidos, e arredondei o resultado para duas casas decimais. Pra ficar igual ao dataframe sugerido.
+```python
+resumo["TM"] = (resumo["SALES_VALUE"] / resumo["SALES_QTY"]).round(2)
+```
 > Por fim, renomeei as colunas para `Loja`, `Categoria` e `TM`, retornando apenas essas três informações no dataframe final.
 <br>
 
@@ -267,9 +291,8 @@ Please filter the period between this given range: `['2019-10-01','2019-12-31']`
 
 ## 🛠️ Como executar
 
-Basta estar na pasta raíz do projeto e executar o comando abaio
 ```bash
-cd .\case2\      
+cd .\case2\ 
 python main.py
 ```
 ____
@@ -283,33 +306,35 @@ Create at least one chart using the table IMDB_movies. The code must be in Pytho
 
 ### 🔹 `Visuais e Dashboard`
 > 💡 **Descrição da Solução:**  
-> Para construir um dashboard interativo com os dados do IMDB, utilizei o **Streamlit** em conjunto com **Plotly** e **Pandas**. Separei o projeto em três arquivos principais:  
+> Para construir um dashboard com os dados do IMDB, utilizei o **Streamlit** em conjunto com **Plotly** e **Pandas**. Separei o projeto em três arquivos principais:  
+<br>
 > `app.py`, responsável por toda a parte visual e lógica do dashboard; <br>
 `functions.py`, onde concentro todas as funções auxiliares; <br>`sql_queries.py`, que guarda as queries SQL de forma organizada.  
 >
-> A conexão com o banco de dados foi feita usando uma função chamada `read_database`, e na versão de produção, estou utilizando as **credenciais via `secrets` do próprio Streamlit Cloud**, garantindo segurança e praticidade no deploy.  
+> A conexão com o banco de dados foi feita usando uma função chamada `read_database`, e na versão de produção, estou utilizando as **credenciais via `secrets` do próprio Streamlit Cloud**.  
+>> Toda essa estrutura foi pensada para ser **modular**, **escalável** e **fácil de manter**, separando responsabilidades em arquivos distintos e aproveitando os recursos do Streamlit.
 >
-> Destaques da solução:
+> **Destaques da solução:**
 > - Criei filtros dinâmicos de **atores**, **gêneros** e **ano** de lançamento, interdependentes: ao selecionar um ator, os gêneros se ajustam com base na nova filtragem (e vice-versa).
 ![alt text](media/filters.gif)
 >
 ><br>
 ><br>
 
-> - Exibi os principais indicadores em `metrics` no topo do dashboard, como **total de filmes**, **rating médio** e **receita total**.
+> - Exibi os principais indicadores em `metrics`/`cards` no topo do dashboard, como **total de filmes**, **rating médio** e **receita total**.
 ![alt text](media/cards_title.png)
 >
 ><br>
 ><br>
 
 
-> - Criei explicações personalizadas para as opções dos `selectbox`, para tornar a navegação mais intuitiva.
+> - Criei explicações personalizadas para as opções dos `selectbox`, para tornar a navegação mais intuitiva; o famoso 'hint'.
 ![alt text](media/hint_multbox.gif)
 >
 ><br>
 ><br>
 
-> - Implementei uma visualização de **Top 10** com `Plotly Express`, baseada na métrica Y (ex: revenue, Rating) e agrupada pela métrica X (ex: Genre, Year). Você pode alterar a métrica de ambos os eixos se necessário, isso evita a criação de multiplos visuais e deixa a aplicação mais simples e performática
+> - 🥇 Implementei uma visualização de **Top 10** com `Plotly Express`, baseada na métrica Y (ex: revenue, Rating) e agrupada pela métrica X (ex: Genre, Year). Você pode alterar a métrica de ambos os eixos se necessário, isso evita a criação de multiplos visuais e deixa a aplicação mais simples e performática.
 ![alt text](media/top_metrics.gif)
 >
 ><br>
@@ -318,12 +343,9 @@ Create at least one chart using the table IMDB_movies. The code must be in Pytho
 > - Por fim, exibo a tabela filtrada no final para permitir análise direta do dataset e filtro também aplicado.
 ![alt text](media/table_filter.gif)
 >
-><br>
-><br>
 
 
-> Toda essa estrutura foi pensada para ser **modular**, **escalável** e **fácil de manter**, separando responsabilidades em arquivos distintos e aproveitando os recursos do Streamlit.
-
+<br>
 
 ### 🔹 `Códigos e funções:`
 > 💡 **Leitura e Pré-processamento dos Dados:**  
@@ -373,7 +395,6 @@ Estrutura:
 ```
 
 ## 🛠️ Como executar
-Basta estar na pasta raíz do projeto e executar o comando abaixo:
 
 ```bash
 cd .\case3\ 

@@ -9,6 +9,5 @@ def main() -> None:
     print(df_tm.to_string(index=False))
     print("\n" + "="*40 + "\n")
 
-
 if __name__ == "__main__":
     main()
