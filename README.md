@@ -306,10 +306,9 @@ Create at least one chart using the table IMDB_movies. The code must be in Pytho
 
 ### 🔹 `Visuais e Dashboard`
 > 💡 **Descrição da Solução:**  
-> Para construir um dashboard com os dados do IMDB, utilizei o **Streamlit** em conjunto com **Plotly** e **Pandas**. Separei o projeto em três arquivos principais:  
-<br>
-> `app.py`, responsável por toda a parte visual e lógica do dashboard; <br>
-`functions.py`, onde concentro todas as funções auxiliares; <br>`sql_queries.py`, que guarda as queries SQL de forma organizada.  
+> Para construir um dashboard com os dados do IMDB, utilizei o **Streamlit** em conjunto com **Plotly** e **Pandas**. Separei o projeto em três arquivos principais:  <br>
+> `app.py`, responsável por toda a parte visual e lógica do dashboard;<br>
+`functions.py`, onde concentro todas as funções auxiliares;<br>`sql_queries.py`, que guarda as queries SQL de forma organizada.  
 >
 > A conexão com o banco de dados foi feita usando uma função chamada `read_database`, e na versão de produção, estou utilizando as **credenciais via `secrets` do próprio Streamlit Cloud**.  
 >> Toda essa estrutura foi pensada para ser **modular**, **escalável** e **fácil de manter**, separando responsabilidades em arquivos distintos e aproveitando os recursos do Streamlit.
@@ -318,7 +317,7 @@ Create at least one chart using the table IMDB_movies. The code must be in Pytho
 > - Criei filtros dinâmicos de **atores**, **gêneros** e **ano** de lançamento, interdependentes: ao selecionar um ator, os gêneros se ajustam com base na nova filtragem (e vice-versa).
 ![alt text](media/filters.gif)
 >
-><br>
+<br>
 ><br>
 
 > - Exibi os principais indicadores em `metrics`/`cards` no topo do dashboard, como **total de filmes**, **rating médio** e **receita total**.

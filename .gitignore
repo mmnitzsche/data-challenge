@@ -1,2 +1,3 @@
 .env
 connection_string.py
+/local_db
