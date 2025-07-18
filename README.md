@@ -29,11 +29,12 @@ Já em produção (Streamlit Cloud), a variável deve ser adicionada na seção 
 │   ├── main.py
 │   ├── analysis.py
 │   ├── sql_queries.py
-│   └── loja_categoria_tm.csv
 ├── case3/
 │   ├── app.py
 │   ├── functions.py
 │   └── sql_queries.py
+├── media/
+├── venv/
 ├── connection.py
 ├── .env
 ├── requirements.txt
@@ -59,7 +60,7 @@ Você vai ver apenas um resumo das soluções questões/desafios.
 Caso queira ver os desafios mais mais detalhes acesse: [Looqbox](https://github.com/looqbox/data-challenge).
 
 
-## 1️⃣ Case 1
+# 1️⃣ Case 1
 
 ### **Case 1.1** - **Questão**: What are the 10 most expensive products in the company?
 
@@ -116,77 +117,237 @@ ORDER BY SECTION_NAME;
 | REFRESCOS            |
 | VINHOS               |
 
+___
+
+# 2️⃣ Case 2
 
 
-## 2️⃣ Case 2
 
-### **Case 1.1** - **Questão**: What are the 10 most expensive products in the company?
+### **Case 2.1** - **Questão**:  The Dev Team was tired of developing the same old queries just varying the filters accordingly to their boss demands.
+As a new member of the crew, your mission now is to create a dynamic function in Python, on the most flexible of ways, to produce queries and retrieve a dataframe based on three parameters:
 
-```sql
-SELECT
-    product_cod,
-    product_name,
-    product_val
-FROM `looqbox-challenge`.data_product
-ORDER BY product_val DESC
-LIMIT 10;
+- product_code: integer
+- store_code: integer
+- date: list of ISO-like strings
+- Date e.g. ``['2019-01-01', '2019-01-31']``
+
+```py
+#%%
+import pandas as pd
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from connection import read_database  
+
+def retrieve_data(product_code: int, store_code: int, date: list) -> pd.DataFrame:
+    try:
+        start_date, end_date = date
+        query = f"""
+        SELECT *
+        FROM data_product_sales
+        WHERE PRODUCT_CODE = {product_code}
+          AND STORE_CODE = {store_code}
+          AND DATE BETWEEN '{start_date}' AND '{end_date}'
+        """
+
+        df = read_database(query)
+        return df
+
+    except Exception as e:
+        print(f"Erro ao recuperar dados: {e}")
+        return pd.DataFrame()
 ```
 
-> 💡 **Descrição da Solução:** Foi apenas achar a tabela que era a responsável por conter o valor "cheio" dos produtos, ordenar a coluna `PRODUCT_VAL` que responsável pelo valor, ordernar por `DESC` e limitar o retorno em 10 linhas, como pedido na questão usando o `LIMIT 10`
+> 💡 **Descrição da Solução:**  
+> Para recuperar os dados criei a `retrieve_data`, que recebe como parâmetros o código do produto (`product_code`), o código da loja (`store_code`) e uma lista com duas datas (`date`) representando o início e o fim do período desejado.  
+> A partir desses parâmetros, construo uma query SQL dinamicamente utilizando f-string (<em>usei ``'''`` para deixar mais legível</em>) para filtrar os dados da tabela `data_product_sales` com base nas colunas `PRODUCT_CODE`, `STORE_CODE` e `DATE`. Em seguida, utilizo a função `read_database` para executar essa query e carregar os dados em um DataFrame do Pandas.
 
 
 ___
-### Case 1.2
+### Case 2.2
 
+
+A brand new client sent you two ready-to-go queries. Those are listed below:
+
+**Query 1:**
+``` sql
+SELECT
+      STORE_CODE,
+      STORE_NAME,
+      START_DATE,
+      END_DATE,
+      BUSINESS_NAME,
+      BUSINESS_CODE
+FROM data_store_cad
+```
+
+**Query 2:**
+``` sql
+SELECT
+        STORE_CODE,
+        DATE,
+        SALES_VALUE,
+        SALES_QTY
+FROM data_store_sales
+WHERE DATE BETWEEN '2019-01-01' AND '2019-12-31'
+In addition, he gave you this set of instructions:
+```
+Use the queries as they are (do not modify them or create a new one);
+
+Please filter the period between this given range: `['2019-10-01','2019-12-31']`
+
+> 💡 **Descrição da Solução:**  
+> Para calcular o **Ticket Médio (TM)** por loja e categoria, comecei importando os dados das tabelas `data_store_sales` e `data_store_cad` usando a função `read_database` (<em>das quais as queries já estão prontas no arquivo `case2/sql_queries.py`</em>).  
+> Em seguida, realizei um `merge` entre essas duas bases utilizando a coluna `STORE_CODE` como chave, garantindo que cada venda fosse associada à loja e à categoria correta.  
+<br>
+> Após isso, agrupei os dados por `STORE_NAME` e `BUSINESS_NAME`, somando os valores de `SALES_VALUE` (valor vendido) e `SALES_QTY` (quantidade vendida).  
+> Com esses dados agregados, calculei o **Ticket Médio (TM)** dividindo o valor vendido pela quantidade de itens vendidos, e arredondei o resultado para duas casas decimais.  
+<br>
+> Por fim, renomeei as colunas para `Loja`, `Categoria` e `TM`, retornando apenas essas três informações no dataframe final.
+<br>
+
+| Loja            | Categoria     | TM    |
+|------------------|---------------|--------|
+| Bahia           | Atacado       | 15.39 |
+| Bangkok         | Posto         | 13.67 |
+| Belem           | Proximidade   | 15.37 |
+| Berlin          | Proximidade   | 15.39 |
+| Buenos Aires    | Atacado       | 15.39 |
+| Chicago         | Varejo        | 15.53 |
+| Dubai           | Atacado       | 15.39 |
+| Hong Kong       | Farma         | 26.33 |
+| London          | Farma         | 28.96 |
+| Madri           | Farma         | 29.00 |
+| Miami           | Posto         | 13.67 |
+| New York        | Proximidade   | 15.39 |
+| Paris           | Proximidade   | 15.39 |
+| Rio de Janeiro  | Farma         | 29.56 |
+| Roma            | Varejo        | 15.39 |
+| Salvador        | Atacado       | 15.39 |
+| Sao Paulo       | Varejo        | 15.39 |
+| Sidney          | Posto         | 13.67 |
+| Tokio           | Varejo        | 15.39 |
+
+
+
+## 🛠️ Como executar
+
+Basta estar na pasta raíz do projeto e executar o comando abaio
 ```bash
 cd .\case2\      
 python main.py
 ```
+____
+<br>
 
-Ira renderizar Esse dataframe:
-| Loja          | Categoria    | TM    |
-|---------------|--------------|-------|
-| Bahia         | Atacado      | 15.39 |
-| Bangkok       | Posto        | 13.67 |
-| Belem         | Proximidade  | 15.37 |
-| Berlin        | Proximidade  | 15.39 |
-| Buenos Aires  | Atacado      | 15.39 |
-| Chicago       | Varejo       | 15.53 |
-| Dubai         | Atacado      | 15.39 |
-| Hong Kong     | Farma        | 26.33 |
-| London        | Farma        | 28.96 |
-| Madri         | Farma        | 29.00 |
-| Miami         | Posto        | 13.67 |
-| New York      | Proximidade  | 15.39 |
-| Paris         | Proximidade  | 15.39 |
-| Rio de Janeiro| Farma        | 29.56 |
-| Roma          | Varejo       | 15.39 |
-| Salvador      | Atacado      | 15.39 |
-| Sao Paulo     | Varejo       | 15.39 |
-| Sidney        | Posto        | 13.67 |
-| Tokio         | Varejo       | 15.39 |
-| Vancouver     | Posto        | 13.67 |
+# 3️⃣ Case 3
+
+### **Case 3** - **Questão**: Building your own visualization
+Create at least one chart using the table IMDB_movies. The code must be in Python, and you are free to use any libraries, data in the table and graphic format. Explain why you chose the visualization (or visualizations) you are submitting.
 
 
-### Case 3
+### 🔹 `Visuais e Dashboard`
+> 💡 **Descrição da Solução:**  
+> Para construir um dashboard interativo com os dados do IMDB, utilizei o **Streamlit** em conjunto com **Plotly** e **Pandas**. Separei o projeto em três arquivos principais:  
+> `app.py`, responsável por toda a parte visual e lógica do dashboard; <br>
+`functions.py`, onde concentro todas as funções auxiliares; <br>`sql_queries.py`, que guarda as queries SQL de forma organizada.  
+>
+> A conexão com o banco de dados foi feita usando uma função chamada `read_database`, e na versão de produção, estou utilizando as **credenciais via `secrets` do próprio Streamlit Cloud**, garantindo segurança e praticidade no deploy.  
+>
+> Destaques da solução:
+> - Criei filtros dinâmicos de **atores**, **gêneros** e **ano** de lançamento, interdependentes: ao selecionar um ator, os gêneros se ajustam com base na nova filtragem (e vice-versa).
+![alt text](media/filters.gif)
+>
+><br>
+><br>
 
-```bash
-cd case3
-uvicorn app:app --reload
+> - Exibi os principais indicadores em `metrics` no topo do dashboard, como **total de filmes**, **rating médio** e **receita total**.
+![alt text](media/cards_title.png)
+>
+><br>
+><br>
+
+
+> - Criei explicações personalizadas para as opções dos `selectbox`, para tornar a navegação mais intuitiva.
+![alt text](media/hint_multbox.gif)
+>
+><br>
+><br>
+
+> - Implementei uma visualização de **Top 10** com `Plotly Express`, baseada na métrica Y (ex: revenue, Rating) e agrupada pela métrica X (ex: Genre, Year). Você pode alterar a métrica de ambos os eixos se necessário, isso evita a criação de multiplos visuais e deixa a aplicação mais simples e performática
+![alt text](media/top_metrics.gif)
+>
+><br>
+><br>
+
+> - Por fim, exibo a tabela filtrada no final para permitir análise direta do dataset e filtro também aplicado.
+![alt text](media/table_filter.gif)
+>
+><br>
+><br>
+
+
+> Toda essa estrutura foi pensada para ser **modular**, **escalável** e **fácil de manter**, separando responsabilidades em arquivos distintos e aproveitando os recursos do Streamlit.
+
+
+### 🔹 `Códigos e funções:`
+> 💡 **Leitura e Pré-processamento dos Dados:**  
+> Os dados foram carregados diretamente do banco de dados com a função `read_database`, a partir de uma query definida no módulo `sql_queries.py`.  
+> Em seguida, registros com valores ausentes em colunas críticas como `Rating`, `RevenueMillions`, `Actors`, `Genre` e `Year` foram descartados para garantir qualidade na análise.  
+>  
+> Após isso, foram aplicadas as funções `ensure_list_format` e `clean_list_items` para converter colunas de texto (`Actors` e `Genre`) em listas limpas, permitindo filtros múltiplos e buscas parciais.
+
+> 💡 **Geração de Filtros Dinâmicos:**  
+> Através de funções como `get_filtered_actors` e `get_filtered_genres`, foram criadas listas de opções que se atualizam de acordo com as seleções atuais do usuário.  
+> Isso permite, por exemplo, que ao selecionar um gênero, apenas os atores que atuaram nesse gênero fiquem disponíveis no filtro de atores (e vice-versa).  
+>  
+> Para isso, os filtros aplicam a função `filter_df_by_list_contains`, que verifica se qualquer item da lista do usuário está contido nos itens da coluna (`Genre` ou `Actors`).
+
+> 💡 **Aplicação dos Filtros no DataFrame:**  
+> Após o ajuste dos filtros, o dataframe é filtrado por:
+> - Intervalo de anos escolhido no slider
+> - Atores e/ou gêneros selecionados  
+> Isso resulta no dataframe `df_filtered`, base principal usada no restante do dashboard.
+
+--
+
+> 💡 **`ensure_list_format`:**  
+> Converte valores que são `str` em listas (usando split por vírgula), ou retorna listas já existentes.  
+> Garante consistência no formato dos dados para aplicar filtros de forma robusta.
+
+> 💡 **`clean_list_items`:**  
+> Percorre listas e aplica `.strip()` em cada item, removendo espaços em branco indesejados.
+
+> 💡 **`filter_df_by_list_contains`:**  
+> Recebe um dicionário de filtros (`{"Actors": [...], "Genre": [...]}`) e aplica uma filtragem em qualquer linha onde **pelo menos um dos termos** está presente (com `lower()` para garantir case-insensitive).  
+> Essa função é o coração da lógica de filtragem múltipla.
+
+> 💡  `get_filtered_actors` e `get_filtered_genres`:
+> Responsáveis por retornar os valores disponíveis para os filtros dinâmicos da interface, com base nas seleções atuais.  
+> Elas utilizam `filter_df_by_list_contains` para refinar as opções de filtro oferecidas ao usuário.
+> 💡  `update_selected_genres` e `update_selected_actors`:
+> Atualizam o estado de seleção (`st.session_state`) com base nas escolhas do usuário, permitindo reatividade e manutenção da seleção mesmo com re-renderização da interface.
+
+
+Estrutura:
+```
+├── case3/
+│   ├── app.py
+│   ├── functions.py
+│   └── sql_queries.py
 ```
 
-Acesse [http://localhost:8000](http://localhost:8000) no navegador para testar os endpoints.
+## 🛠️ Como executar
+Basta estar na pasta raíz do projeto e executar o comando abaixo:
 
----
+```bash
+cd .\case3\ 
+streamlit run app.py
+```
 
-## 📌 Observações
+## 👨‍💻 Author
 
-- O arquivo `connection_string.py` está preparado para conter as credenciais de conexão com banco de dados PostgreSQL (mas não inclui senhas por segurança).
-- O projeto foi modularizado para facilitar manutenção, leitura e reutilização de código.
-- Algumas partes foram adaptadas para rodar localmente sem conexão real com banco, simulando resultados onde necessário.
-
----
-
-## 🧠 Autor
-
-Desenvolvido por **[Seu Nome Aqui]** como parte do processo seletivo da Looqbox.
+Developed by Mateus Nitzsche. 
+[Blog](https://blog-mmnitzsches-projects.vercel.app/)
+ | [Linkedin](https://www.linkedin.com/in/mateusnit/)
+ | [Github](https://github.com/mmnitzsche/)

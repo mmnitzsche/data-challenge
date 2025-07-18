@@ -47,7 +47,7 @@ max_year = int(df["Year"].max())
 st.sidebar.title("Filtros")
 
 selected_range = st.sidebar.slider(
-    "Anos",
+    "Years",
     min_value=min_year,
     max_value=max_year,
     value=(min_year, max_year),
