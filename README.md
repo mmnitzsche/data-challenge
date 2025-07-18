@@ -117,6 +117,42 @@ ORDER BY SECTION_NAME;
 | REFRESCOS            |
 | VINHOS               |
 
+
+### **SQL TEST.3** - **Questão**:What was the total sale of products (in $) of each Business Area in the first quarter of 2019?
+
+```sql
+SELECT
+    c.BUSINESS_NAME        AS business_area,
+    SUM(s.SALES_VALUE)     AS total_sales_usd
+FROM `looqbox-challenge`.data_store_sales AS s
+JOIN `looqbox-challenge`.data_store_cad   AS c
+      ON s.STORE_CODE = c.STORE_CODE
+WHERE s.DATE >= '2019-01-01'
+  AND s.DATE <  '2019-04-01'    
+GROUP BY c.BUSINESS_NAME
+ORDER BY total_sales_usd DESC;
+```
+> 💡 **Descrição da Solução:**  
+> Esse código SQL calcula o total de vendas em dólares (`SALES_VALUE`) por área de negócio (`BUSINESS_NAME`) durante o **primeiro trimestre de 2019** (de 1º de janeiro a 31 de março). Usei menor que  `< 2019-04-01`
+> 
+> A consulta realiza um `JOIN` entre as tabelas `data_store_sales` e `data_store_cad` com base na coluna `STORE_CODE`, garantindo que os dados de venda sejam associados.
+> 
+> Em seguida, filtra os dados de vendas para incluir apenas o período desejado.  
+> 
+> Os resultados são agrupados por área de negócio (`BUSINESS_NAME`) e a soma das vendas (`SALES_VALUE`) é calculada para cada grupo.  
+> 
+> Por fim, os resultados são ordenados em ordem decrescente de vendas totais (`total_sales_usd`).
+
+| Área de Negócio | Total de Vendas (US$) |
+|------------------|------------------------|
+| Farma            | 81.776.691,73          |
+| Varejo           | 81.032.347,65          |
+| Atacado          | 80.384.884,60          |
+| Proximidade      | 80.171.122,80          |
+| Posto            | 32.072.326,40          |
+
+
+
 ___
 
 # 1️⃣ Case 1
