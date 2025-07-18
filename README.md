@@ -6,16 +6,18 @@ Este repositório contém a minha solução para o desafio de dados proposto pel
 
 ## 📁 Estrutura do Repositório
 
-<span style="font-size: 30px;">🚨</span> 
-<span style="font-size: 16px; font-weight: bold;">Importante:</span> 
+<span style="font-size: 30px;">🚨</span>
+<span style="font-size: 16px; font-weight: bold;">Importante:</span>
 <span style="font-size: 16px;">
-  O arquivo <code>connection_string.py</code> contém a string de conexão responsável por estabelecer a comunicação segura com o banco de dados. Por questões de segurança, ele foi omitido, mas você pode reproduzi-lo conforme necessário.
+Para conectar ao banco de dados de forma segura, é necessário configurar a variável de ambiente <code>DATABASE_URL</code>.
+Em ambiente local, essa configuração deve ser feita em um arquivo <code>.env</code>.
+Já em produção (Streamlit Cloud), a variável deve ser adicionada na seção <code>Settings > Secrets</code> do seu aplicativo.
 </span>
+---
 
-
-`connection_string.py`
+`.env`
  ``` py
-  cs = "protocolo+driver://usuario:senha@endereco_do_host/nome_do_banco" 
+  DATABASE_URL=protocolo+driver://usuario:senha@endereco_do_host/nome_do_banco
 ```
 
 ```
@@ -33,7 +35,7 @@ Este repositório contém a minha solução para o desafio de dados proposto pel
 │   ├── functions.py
 │   └── sql_queries.py
 ├── connection.py
-├── connection_string.py ❌
+├── .env
 ├── requirements.txt
 └── README.md
 ```
@@ -51,40 +53,90 @@ Para instalar os requisitos, utilize:
 pip install -r requirements.txt
 ```
 
----
+___
+## 🧠 Resolução dos desafios  
+Você vai ver apenas um resumo das soluções questões/desafios.
+Caso queira ver os desafios mais mais detalhes acesse: [Looqbox](https://github.com/looqbox/data-challenge).
 
-## 💼 Resumo dos desafios
 
-Nessa seção é uma breve
+## 1️⃣ Case 1
 
-### 📊 Case 1: SQL & Raciocínio Lógico
+### **Case 1.1** - **Questão**: What are the 10 most expensive products in the company?
 
-- Esse case é focado em resolução de perguntas de negócio utilizando SQL.
-- Exige raciocínio lógico e clareza na explicação.
+```sql
+SELECT
+    product_cod,
+    product_name,
+    product_val
+FROM `looqbox-challenge`.data_product
+ORDER BY product_val DESC
+LIMIT 10;
+```
 
-### 📈 Case 2: Análise e Criação de Métricas
+> 💡 **Descrição da Solução:** Foi apenas achar a tabela que era a responsável por conter o valor "cheio" dos produtos, ordenar a coluna `PRODUCT_VAL` que responsável pelo valor, ordernar por `DESC` e limitar o retorno em 10 linhas, como pedido na questão usando o `LIMIT 10`
 
-- Análise de um dataset de vendas fictício (presente no arquivo `loja_categoria_tm.csv`) ou pela conexão do banco de dados da looqbox.
-- Criação de métricas relevantes por categoria, loja e produto.
-- Organização do código modular em scripts:
-  - `main.py`: ponto de entrada
-  - `analysis.py`: funções principais de análise
-  - `sql_queries.py`: contém as queries de apoio
+| Código  | Produto                                                                 | Preço  |
+|---------|-------------------------------------------------------------------------|------------|
+| 320046  | Escova Dental Eletrica ORAL B D34 Professional Care 5000 110v           | 399.90     |
+| 315481  | Cafeteira Expresso 3 CORACOES Tres Modo Vermelho                        | 499.00     |
+| 311397  | Conjunto de Panelas Allegra em Inox TRAMONTINA 5 Pecas Gratis Utensilios 5 Pecas | 359.00     |
+| 301409  | Whisky Escoces THE MACALLAN Ruby Garrafa 700ml com Caixa                | 741.99     |
+| 190817  | Champagne Rose VEUVE CLICQUOT PONSARDIM Garrafa 750ml                   | 366.90     |
+| 176185  | Whisky Escoces JOHNNIE WALKER Blue Label Garrafa 750ml                  | 735.90     |
+| 154431  | Champagne Frances Brut Imperial MOET & CHANDON Garrafa 750ml            | 315.90     |
+| 153795  | Champagne Frances Brut Imperial MOET Rose Garrafa 750ml                 | 359.90     |
+| 147706  | Whisky Escoces CHIVAS REGAL 18 Anos Garrafa 750ml                       | 329.90     |
+| 100280  | Vinho Portugues Tinto Vintage QUINTA DO CRASTO Garrafa 750ml            | 445.90     |
 
-### 📉 Case 3: Desenvolvimento de API Simples
 
-- Simula a construção de uma pequena API para responder a perguntas baseadas em dados.
-- Utiliza FastAPI (ou estrutura simples similar) para responder endpoints REST.
-- Principais arquivos:
-  - `app.py`: define os endpoints
-  - `functions.py`: lógica de negócio
-  - `sql_queries.py`: queries de apoio
 
----
+<br>
 
-## 🛠️ Como Executar
+### **Case 1.2** - **Questão**: What sections do the ``BEBIDAS`` and ``PADARIA`` departments have?
 
-### Case 2
+```sql
+SELECT DISTINCT
+    SECTION_NAME
+FROM `looqbox-challenge`.data_product
+WHERE
+    DEP_NAME IN ('BEBIDAS', 'PADARIA')
+ORDER BY SECTION_NAME;
+```
+
+> 💡 **Descrição da Solução:** quando identifiquei que os valores estavam na tabela `.data_product` eu fiz um `WHERE` onde estava a coluna dos departamentos (`dep_name`) e ordenei pelo nome de seção (`section_name`)
+
+| Departamento          |
+|----------------------|
+| BEBIDAS              |
+| CERVEJAS             |
+| DOCES-E-SOBREMESAS   |
+| GESTANTE             |
+| PADARIA              |
+| QUEIJOS-E-FRIOS      |
+| REFRESCOS            |
+| VINHOS               |
+
+
+
+## 2️⃣ Case 2
+
+### **Case 1.1** - **Questão**: What are the 10 most expensive products in the company?
+
+```sql
+SELECT
+    product_cod,
+    product_name,
+    product_val
+FROM `looqbox-challenge`.data_product
+ORDER BY product_val DESC
+LIMIT 10;
+```
+
+> 💡 **Descrição da Solução:** Foi apenas achar a tabela que era a responsável por conter o valor "cheio" dos produtos, ordenar a coluna `PRODUCT_VAL` que responsável pelo valor, ordernar por `DESC` e limitar o retorno em 10 linhas, como pedido na questão usando o `LIMIT 10`
+
+
+___
+### Case 1.2
 
 ```bash
 cd .\case2\      

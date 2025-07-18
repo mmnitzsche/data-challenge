@@ -1,3 +1,6 @@
-SELECT DISTINCT SECTION_NAME FROM `looqbox-challenge`.data_product 
-WHERE DEP_NAME IN ('BEBIDAS', 'PADARIA')
+SELECT DISTINCT
+    SECTION_NAME
+FROM `looqbox-challenge`.data_product
+WHERE
+    DEP_NAME IN ('BEBIDAS', 'PADARIA')
 ORDER BY SECTION_NAME;
